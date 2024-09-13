@@ -1,4 +1,4 @@
-.PHONY: shell install test fmt lint
+.PHONY: shell install serve test fmt lint
 
 # Poetry 가상환경 활성화
 shell:
