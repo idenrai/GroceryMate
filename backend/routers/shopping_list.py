@@ -17,9 +17,9 @@ router = APIRouter()
 def create_shopping_list_endpoint(
     shopping_list: ShoppingListCreate, db: Generator = Depends(get_db)
 ):
-    return create_shopping_list(
-        db, shopping_list, user_id=1
-    )  # user_id는 실제 구현에서는 인증을 통해 받아야 합니다.
+    # TODO: user_id 구현
+    user_id = "43401d31-f674-4bee-8c43-cfb5b8b8c18b"
+    return create_shopping_list(db, shopping_list, user_id=user_id)
 
 
 @router.get("/shopping-lists/{shopping_list_id}", response_model=ShoppingList)
@@ -36,7 +36,10 @@ def update_shopping_list_endpoint(
     shopping_list: ShoppingListCreate,
     db: Generator = Depends(get_db),
 ):
-    return update_shopping_list(db, shopping_list_id, shopping_list)
+    updated_shopping_list = update_shopping_list(db, shopping_list_id, shopping_list)
+    if not updated_shopping_list:
+        raise HTTPException(status_code=404, detail="Shopping list not found")
+    return updated_shopping_list
 
 
 @router.delete("/shopping-lists/{shopping_list_id}")
@@ -44,4 +47,5 @@ def delete_shopping_list_endpoint(
     shopping_list_id: UUID, db: Generator = Depends(get_db)
 ):
     delete_shopping_list(db, shopping_list_id)
+    return {"message": "Shopping list deleted successfully"}
     return {"message": "Shopping list deleted successfully"}
